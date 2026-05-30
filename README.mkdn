@@ -60,6 +60,8 @@ a hashref with the found parts.
 Finds all matches for dates in the filename and returns a hash
 keyed by the date type of each match.
 
+If no date can be found, returns an empty list.
+
 ## `guess_date_format $sources, %options`
 
     my $by_found_date = guess_date_format( \@files );
@@ -91,7 +93,7 @@ Options:
 
         mode => 'lax'
 
-    If you enable strict mode, an exception will be thrown for files for which no
+    If you enable `strict` mode, an exception will be thrown for files for which no
     date can be found.
 
 - **preference**

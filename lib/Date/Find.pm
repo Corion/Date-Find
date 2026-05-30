@@ -183,6 +183,8 @@ sub find_ymd( $date_regex, $source, $date_regex_order='ymd' ) {
 Finds all matches for dates in the filename and returns a hash
 keyed by the date type of each match.
 
+If no date can be found, returns an empty list.
+
 =cut
 
 sub find_all_ymd( $source, %options ) {
@@ -229,7 +231,7 @@ sub guess_date_format( $sources, %options ) {
             }
         } else {
             $res{ 'no_date' } //= [];
-            push @{$res{$_}}, { value => $s, date => undef };
+            push @{$res{ 'no_date' }}, { value => $s, date => undef };
         }
     }
     return \%res
@@ -254,7 +256,7 @@ Options:
 
   mode => 'lax'
 
-If you enable strict mode, an exception will be thrown for files for which no
+If you enable C<strict> mode, an exception will be thrown for files for which no
 date can be found.
 
 =item B<preference>
@@ -285,8 +287,10 @@ sub guess_ymd( $sources, %options ) {
     my $fmt;
     if( $values->{no_date} and @{ $values->{no_date}} and $options{ mode } eq 'strict') {
         # Maybe we don't want croak?!
-        croak "Entries without a date found: " . join " ", @{ $values->{no_date} };
+        croak "Entries without a date found: " .
+            join " ", map { $_->{value} } @{ $values->{no_date} };
     };
+    use Data::Dumper; warn Dumper $values;
     delete $values->{no_date}; # we can't do anything about them
 
     if( scalar keys %$values == 1 ) {
