@@ -1,4 +1,4 @@
-package Date::Find 0.03;
+package Date::Find 0.04;
 use 5.020;
 use experimental 'signatures';
 
